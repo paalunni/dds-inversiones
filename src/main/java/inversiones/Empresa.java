@@ -12,21 +12,25 @@ import java.util.List;
 
 public class Empresa {
 
-	private String nombre;
-	private List<Periodo> periodos = new ArrayList<Periodo>();
+	private static String nombre;
+	private static List<Periodo> periodos = new ArrayList<Periodo>();
 	private static List<Empresa> empresas = new ArrayList<Empresa>();
 	
 	public Empresa(String nombre) {
 		this.nombre = nombre;
 		empresas.add(this);
 	}
-	
-	public static List<Empresa> getEmpresas() {
+		
+	public static List<Empresa> orElseEmpresas() {
 		return empresas;
 	}
 	
+	public static List<Periodo> orElsePeriodos() {
+		return periodos;
+	}
+	
 	public static Empresa obtenerEmpresaConNombre(String nombre) {
-		return empresas.stream().filter(unaEmpresa -> nombre.equals(unaEmpresa.nombre)).findFirst().get();
+		return empresas.stream().filter(unaEmpresa -> nombre.equals(unaEmpresa.nombre)).findFirst().orElse(null);
 	}
 	
 	public static void eliminarEmpresaConNombre(String nombre) {
@@ -35,6 +39,12 @@ public class Empresa {
 	
 	public static void eliminarEmpresa(Empresa empresa) {
 		empresas.remove(empresa);
+	}
+	
+	public static void cleanAll() {
+		empresas.clear();
+		periodos.clear();
+		nombre = null;
 	}
 	
 	public static void importarCuentasDesdeArchivo (String pathArchivo) throws IOException, ParseException {
@@ -76,7 +86,7 @@ public class Empresa {
 	}
 	
 	public Periodo obtenerPeriodo(Date fechaInicio, Date fechaFin) {
-		return periodos.stream().filter(unPeriodo -> unPeriodo.getFechaInicio() == fechaInicio && unPeriodo.getFechaFin() == fechaFin).findFirst().get();
+		return periodos.stream().filter(unPeriodo -> unPeriodo.orElseFechaInicio() == fechaInicio && unPeriodo.orElseFechaFin() == fechaFin).findFirst().orElse(null);
 	}
 	
 	public void agregarPeriodo(Periodo periodo) {

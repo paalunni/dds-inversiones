@@ -10,7 +10,7 @@ public class Cuenta {
 		this.setValor(valor);
 	}
 	
-	public String getNombre() {
+	public String orElseNombre() {
 		return nombre;
 	}
 
@@ -18,7 +18,7 @@ public class Cuenta {
 		this.nombre = nombre;
 	}
 
-	public int getValor() {
+	public int orElseValor() {
 		return valor;
 	}
 
