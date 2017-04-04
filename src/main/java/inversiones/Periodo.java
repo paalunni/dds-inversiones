@@ -15,15 +15,15 @@ public class Periodo {
 		this.fechaFin = fechaFin;
 	}
 	
-	public Date orElseFechaInicio() {
+	public Date getFechaInicio() {
 		return fechaInicio;
 	}
 	
-	public void orElseFechaInicio(Date fechaInicio) {
+	public void getFechaInicio(Date fechaInicio) {
 		this.fechaInicio = fechaInicio;
 	}
 	
-	public Date orElseFechaFin() {
+	public Date getFechaFin() {
 		return fechaFin;
 	}
 	
@@ -42,7 +42,7 @@ public class Periodo {
 	}
 	
 	public Cuenta obtenerCuenta(String nombreCuenta) {
-		return cuentas.stream().filter(unaCuenta -> unaCuenta.orElseNombre().equals(nombreCuenta)).findFirst().orElse(null);
+		return cuentas.stream().filter(unaCuenta -> unaCuenta.getNombre().equals(nombreCuenta)).findFirst().orElse(null);
 	}
 	
 }

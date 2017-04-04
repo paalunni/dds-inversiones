@@ -17,18 +17,18 @@ public class CargarDatosTest {
 	@Test
 	public void insertar2EmpresasNuevas() throws IOException, ParseException{
 		Empresa.importarCuentasDesdeArchivo("C:\\archivo_2_empresas.txt");
-		Assert.assertEquals(2, Empresa.orElseEmpresas().size());
+		Assert.assertEquals(2, Empresa.getEmpresas().size());
 	}
 	
 	@Test
 	public void insertarRegistrosMismaEmpresa() throws IOException, ParseException{
 		Empresa.importarCuentasDesdeArchivo("C:\\archivo_misma_empresa.txt");
-		Assert.assertEquals(1, Empresa.orElseEmpresas().size());
+		Assert.assertEquals(1, Empresa.getEmpresas().size());
 	}
 	
 	@Test
 	public void validarCreacionPeriodosMismaEmpresa() throws IOException, ParseException{
 		Empresa.importarCuentasDesdeArchivo("C:\\archivo_misma_empresa.txt");
-		Assert.assertEquals(3, Empresa.orElsePeriodos().size());
+		Assert.assertEquals(3, Empresa.getPeriodos().size());
 	}
 }

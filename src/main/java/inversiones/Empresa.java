@@ -21,11 +21,11 @@ public class Empresa {
 		empresas.add(this);
 	}
 		
-	public static List<Empresa> orElseEmpresas() {
+	public static List<Empresa> getEmpresas() {
 		return empresas;
 	}
 	
-	public static List<Periodo> orElsePeriodos() {
+	public static List<Periodo> getPeriodos() {
 		return periodos;
 	}
 	
@@ -86,7 +86,7 @@ public class Empresa {
 	}
 	
 	public Periodo obtenerPeriodo(Date fechaInicio, Date fechaFin) {
-		return periodos.stream().filter(unPeriodo -> unPeriodo.orElseFechaInicio() == fechaInicio && unPeriodo.orElseFechaFin() == fechaFin).findFirst().orElse(null);
+		return periodos.stream().filter(unPeriodo -> unPeriodo.getFechaInicio() == fechaInicio && unPeriodo.getFechaFin() == fechaFin).findFirst().orElse(null);
 	}
 	
 	public void agregarPeriodo(Periodo periodo) {
