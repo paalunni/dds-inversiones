@@ -6,14 +6,11 @@ import java.text.ParseException;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class TestCargarDatos {
-
-	Empresa empresa = new Empresa();
+public class CargarDatosTest {
 
 	@Test
 	public void insertarDatosValidarEmpresasNuevas() throws IOException, ParseException{
-		empresa.cargarDatos("C:\\archivo.txt");
-		Assert.assertEquals(3, empresa.empresas.size());
+		Empresa.importarCuentasDesdeArchivo("C:\\archivo.txt");
+		Assert.assertEquals(3, Empresa.getEmpresas().size());
 	}
-	
 }

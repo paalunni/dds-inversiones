@@ -1,31 +1,48 @@
 package inversiones;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class Periodo {
 
-	List<Cuenta> cuentas = new ArrayList<Cuenta>();
-	Date fechaComienzo;
-	Date fechaFin;
+	private List<Cuenta> cuentas = new ArrayList<Cuenta>();
+	private Date fechaInicio;
+	private Date fechaFin;
 	
-	void agregarPeriodos(String fInicio,String fFin, String cuenta, String valor) throws ParseException{
-		SimpleDateFormat formatoDeFecha = new SimpleDateFormat("dd/MM/yyyy");
+	public Periodo(Date fechaComienzo, Date fechaFin) {
+		this.fechaInicio = fechaComienzo;
+		this.fechaFin = fechaFin;
+	}
+	
+	public Date getFechaInicio() {
+		return fechaInicio;
+	}
+	
+	public void setFechaInicio(Date fechaInicio) {
+		this.fechaInicio = fechaInicio;
+	}
+	
+	public Date getFechaFin() {
+		return fechaFin;
+	}
+	
+	public void setFechaFin(Date fechaFin) {
+		this.fechaFin = fechaFin;
+	}
+
+	public void importarCuenta(String nombreCuenta, String valorCuenta) {
+		Cuenta cuenta = obtenerCuenta(nombreCuenta);
 		
-		//ver
-		if(cuenta == "pepe"){
-			//agregar logica si la cuenta ya existe
+		if(cuenta == null) {
+			cuenta = new Cuenta(nombreCuenta, Integer.parseInt(valorCuenta));
+		} else {
+			cuenta.setValor(Integer.parseInt(valorCuenta));
 		}
-		else{
-			fechaComienzo = formatoDeFecha.parse(fInicio);
-			fechaFin = formatoDeFecha.parse(fFin);
-			Cuenta cuen = new Cuenta();
-			cuen.agregarValores(cuenta, valor);
-			cuentas.add(cuen);
-		}
+	}
+	
+	public Cuenta obtenerCuenta(String nombreCuenta) {
+		return cuentas.stream().filter(unaCuenta -> unaCuenta.getNombre().equals(nombreCuenta)).findFirst().get();
 	}
 	
 }
