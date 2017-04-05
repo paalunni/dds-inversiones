@@ -9,11 +9,16 @@ import org.junit.Test;
 
 public class CargarDatosTest {
 
+	//TODO Buscar una forma mas copada de hacer que los tests sean independientes.
 	@After
 	public void tearDown() {
-		Empresa.cleanAll();
+		Empresa.clean();
 	}
 	
+	/*
+	 * TODO Los archivos deberian usar path relativos, no absolutos. No podemos forzar
+	 * a todos a tener los archivos en el mismo lugar, ni a usar el mismo OS
+	 */
 	@Test
 	public void insertar2EmpresasNuevas() throws IOException, ParseException{
 		Empresa.importarCuentasDesdeArchivo("C:\\archivo_2_empresas.txt");
@@ -29,6 +34,6 @@ public class CargarDatosTest {
 	@Test
 	public void validarCreacionPeriodosMismaEmpresa() throws IOException, ParseException{
 		Empresa.importarCuentasDesdeArchivo("C:\\archivo_misma_empresa.txt");
-		Assert.assertEquals(3, Empresa.getPeriodos().size());
+		Assert.assertEquals(3, Empresa.getAllPeriodos().size());
 	}
 }

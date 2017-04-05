@@ -12,8 +12,8 @@ import java.util.List;
 
 public class Empresa {
 
-	private static String nombre;
-	private static List<Periodo> periodos = new ArrayList<Periodo>();
+	private String nombre;
+	private List<Periodo> periodos = new ArrayList<Periodo>();
 	private static List<Empresa> empresas = new ArrayList<Empresa>();
 	
 	public Empresa(String nombre) {
@@ -24,8 +24,21 @@ public class Empresa {
 	public static List<Empresa> getEmpresas() {
 		return empresas;
 	}
-	
-	public static List<Periodo> getPeriodos() {
+
+	public static void clean() {
+		empresas = new ArrayList<Empresa>();
+	}
+
+	public static List<Periodo> getAllPeriodos() {
+		List<Periodo> periodos = new ArrayList<Periodo>();
+		getEmpresas().stream().forEach(empresa -> {
+			periodos.addAll(empresa.periodos);
+		});
+
+		return periodos;
+	}
+
+	public List<Periodo> getPeriodos() {
 		return periodos;
 	}
 	
@@ -41,30 +54,41 @@ public class Empresa {
 		empresas.remove(empresa);
 	}
 	
-	public static void cleanAll() {
-		empresas.clear();
-		periodos.clear();
-		nombre = null;
-	}
-	
-	public static void importarCuentasDesdeArchivo (String pathArchivo) throws IOException, ParseException {
-		//Levantar archivo y cargar cuentas		
-		FileReader fr = new FileReader (new File (pathArchivo));
-		BufferedReader br = new BufferedReader(fr);
+	public static void importarCuentasDesdeArchivo (String pathArchivo) {
+		
+		/*
+		 * Levantar archivo y cargar cuentas
+		 * Formato: nombreEmpresa;fechaInicio;fechaFin;cuenta;valor
+		 */
+
+		FileReader fr = null;
+		BufferedReader br;
 		String linea;
 		String[] arraySubstrings;
 		Empresa empresa;
-		
-		//El formato de las lineas es nombreEmpresa;fechaInicio;fechaFin;cuenta;valor
-		while ((linea = br.readLine()) != null) {
-			arraySubstrings = linea.split(";");
-			empresa = Empresa.obtenerEmpresaConNombre(arraySubstrings[0]);
-			if(empresa == null) {
-				empresa = new Empresa(arraySubstrings[0]);
+
+		try {
+			fr = new FileReader (new File (pathArchivo));
+			br = new BufferedReader(fr);
+			
+			while ((linea = br.readLine()) != null) {
+				arraySubstrings = linea.split(";");
+				empresa = Empresa.obtenerEmpresaConNombre(arraySubstrings[0]);
+				if(empresa == null) {
+					empresa = new Empresa(arraySubstrings[0]);
+				}
+				empresa.importarCuenta(arraySubstrings[1], arraySubstrings[2], arraySubstrings[3], arraySubstrings[4]);
 			}
-			empresa.importarCuenta(arraySubstrings[1], arraySubstrings[2], arraySubstrings[3], arraySubstrings[4]);
-		}
-		fr.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(fr != null)
+				try {
+					fr.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+		}		
 	}
 	
 	public void importarCuenta(String fechaInicioString, String fechaFinString, String cuentaString, String valorCuentaString) throws ParseException {
