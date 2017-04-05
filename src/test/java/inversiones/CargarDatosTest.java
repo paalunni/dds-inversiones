@@ -2,6 +2,7 @@ package inversiones;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -35,5 +36,53 @@ public class CargarDatosTest {
 	public void validarCreacionPeriodosMismaEmpresa() throws IOException, ParseException{
 		Empresa.importarCuentasDesdeArchivo("C:\\archivo_misma_empresa.txt");
 		Assert.assertEquals(3, Empresa.getAllPeriodos().size());
+	}
+	
+	@Test
+	public void eliminarVariasEmpresasYEvaluarSize() throws IOException, ParseException{
+		ArrayList<String> nombres = new ArrayList<String>(3);
+		nombres.add("Apple");
+		nombres.add("Microsoft");
+		nombres.add("Samsung");
+		
+		for(String unNombre : nombres) {
+			new Empresa(unNombre);
+		}
+		
+		nombres.remove("Apple");
+		Empresa.eliminarEmpresasConNombre(nombres);
+		
+		Assert.assertEquals(1, Empresa.getEmpresas().size());
+	}
+	
+	@Test
+	public void eliminarVariasEmpresasYEvaluarRestante() throws IOException, ParseException{
+		ArrayList<String> nombres = new ArrayList<String>(3);
+		nombres.add("Apple");
+		nombres.add("Microsoft");
+		nombres.add("Samsung");
+		
+		for(String unNombre : nombres) {
+			new Empresa(unNombre);
+		}
+		
+		nombres.remove("Apple");
+		Empresa.eliminarEmpresasConNombre(nombres);
+		
+		Assert.assertEquals("Apple", Empresa.getEmpresas().get(0).getNombre());
+	}
+	
+	@Test
+	public void obtenerVariasEmpresas() throws IOException, ParseException{
+		ArrayList<String> nombres = new ArrayList<String>(3);
+		nombres.add("Apple");
+		nombres.add("Microsoft");
+		nombres.add("Samsung");
+		
+		for(String unNombre : nombres) {
+			new Empresa(unNombre);
+		}
+		
+		Assert.assertEquals(3, Empresa.obtenerEmpresasConNombre(nombres).size());
 	}
 }

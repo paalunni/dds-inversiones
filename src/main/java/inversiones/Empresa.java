@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Empresa {
 
@@ -24,6 +25,18 @@ public class Empresa {
 	public static List<Empresa> getEmpresas() {
 		return empresas;
 	}
+	
+	public String getNombre() {
+		return nombre;
+	}
+	
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+	
+	public List<Periodo> getPeriodos() {
+		return periodos;
+	}
 
 	public static void clean() {
 		empresas = new ArrayList<Empresa>();
@@ -37,21 +50,36 @@ public class Empresa {
 
 		return periodos;
 	}
-
-	public List<Periodo> getPeriodos() {
-		return periodos;
-	}
 	
 	public static Empresa obtenerEmpresaConNombre(String nombre) {
 		return empresas.stream().filter(unaEmpresa -> nombre.equals(unaEmpresa.nombre)).findFirst().orElse(null);
 	}
 	
+	public static List<Empresa> obtenerEmpresasConNombre(List<String> nombres) {
+		return empresas.stream().filter(unaEmpresa -> nombres.contains(unaEmpresa.nombre)).collect(Collectors.toList());
+	}
+	
 	public static void eliminarEmpresaConNombre(String nombre) {
-		//Implementar algo aqui
+		Empresa empresaAEliminar = obtenerEmpresaConNombre(nombre);
+		if(empresaAEliminar != null) {
+			empresas.remove(empresaAEliminar);
+		}
+	}
+	
+	public static void eliminarEmpresasConNombre(List<String> nombres) {
+		empresas.removeAll(obtenerEmpresasConNombre(nombres));
 	}
 	
 	public static void eliminarEmpresa(Empresa empresa) {
 		empresas.remove(empresa);
+	}
+	
+	public static void eliminarEmpresas(List<Empresa> unasEmpresas) {
+		empresas.removeAll(unasEmpresas);
+	}
+	
+	public void agregarPeriodo(Periodo periodo) {
+		periodos.add(periodo);
 	}
 	
 	public static void importarCuentasDesdeArchivo (String pathArchivo) {
@@ -111,9 +139,5 @@ public class Empresa {
 	
 	public Periodo obtenerPeriodo(Date fechaInicio, Date fechaFin) {
 		return periodos.stream().filter(unPeriodo -> unPeriodo.getFechaInicio() == fechaInicio && unPeriodo.getFechaFin() == fechaFin).findFirst().orElse(null);
-	}
-	
-	public void agregarPeriodo(Periodo periodo) {
-		periodos.add(periodo);
 	}
 }
