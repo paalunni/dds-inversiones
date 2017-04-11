@@ -62,12 +62,12 @@ public class Empresa {
 	public static void eliminarEmpresaConNombre(String nombre) {
 		Empresa empresaAEliminar = obtenerEmpresaConNombre(nombre);
 		if(empresaAEliminar != null) {
-			empresas.remove(empresaAEliminar);
+			Empresa.eliminarEmpresa(empresaAEliminar);
 		}
 	}
 	
 	public static void eliminarEmpresasConNombre(List<String> nombres) {
-		empresas.removeAll(obtenerEmpresasConNombre(nombres));
+		Empresa.eliminarEmpresas(obtenerEmpresasConNombre(nombres));
 	}
 	
 	public static void eliminarEmpresa(Empresa empresa) {
@@ -80,6 +80,18 @@ public class Empresa {
 	
 	public void agregarPeriodo(Periodo periodo) {
 		periodos.add(periodo);
+	}
+	
+	public Periodo obtenerPeriodo(Date fechaInicio, Date fechaFin) {
+		return periodos.stream().filter(unPeriodo -> unPeriodo.getFechaInicio().equals(fechaInicio) && unPeriodo.getFechaFin().equals(fechaFin)).findFirst().orElse(null);
+	}
+	
+	public void eliminarPeriodo(Date fechaInicio, Date fechaFin) {
+		eliminarPeriodo(obtenerPeriodo(fechaInicio, fechaFin));
+	}
+	
+	public void eliminarPeriodo(Periodo periodo) {
+		periodos.remove(periodo);
 	}
 	
 	public static void importarCuentasDesdeArchivo (String pathArchivo) {
@@ -137,7 +149,13 @@ public class Empresa {
 		periodo.importarCuenta(cuentaString, valorCuentaString);
 	}
 	
-	public Periodo obtenerPeriodo(Date fechaInicio, Date fechaFin) {
-		return periodos.stream().filter(unPeriodo -> unPeriodo.getFechaInicio() == fechaInicio && unPeriodo.getFechaFin() == fechaFin).findFirst().orElse(null);
+	public float consultarCuenta(String nombreCuenta, Date fechaDesde, Date fechaHasta) throws PeriodoNoExisteException, CuentaNoExisteException {
+		Periodo periodo = obtenerPeriodo(fechaDesde, fechaHasta);
+		
+		if(periodo == null) {
+			throw new PeriodoNoExisteException();
+		}
+		
+		return periodo.consultarCuenta(nombreCuenta);
 	}
 }

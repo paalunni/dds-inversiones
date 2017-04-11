@@ -3,9 +3,9 @@ package inversiones;
 public class Cuenta {
 
 	private String nombre;
-	private int valor;
+	private float valor;
 	
-	public Cuenta (String nombre, int valor) {
+	public Cuenta (String nombre, float valor) {
 		this.setNombre(nombre);
 		this.setValor(valor);
 	}
@@ -18,11 +18,11 @@ public class Cuenta {
 		this.nombre = nombre;
 	}
 
-	public int getValor() {
+	public float getValor() {
 		return valor;
 	}
 
-	public void setValor(int valor) {
+	public void setValor(float valor) {
 		this.valor = valor;
 	}
 }

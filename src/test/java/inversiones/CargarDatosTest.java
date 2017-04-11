@@ -2,6 +2,7 @@ package inversiones;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import org.junit.After;
@@ -22,24 +23,24 @@ public class CargarDatosTest {
 	 */
 	@Test
 	public void insertar2EmpresasNuevas() throws IOException, ParseException{
-		Empresa.importarCuentasDesdeArchivo("C:\\archivo_2_empresas.txt");
+		Empresa.importarCuentasDesdeArchivo("./archivo_2_empresas.txt");
 		Assert.assertEquals(2, Empresa.getEmpresas().size());
 	}
 	
 	@Test
 	public void insertarRegistrosMismaEmpresa() throws IOException, ParseException{
-		Empresa.importarCuentasDesdeArchivo("C:\\archivo_misma_empresa.txt");
+		Empresa.importarCuentasDesdeArchivo("./archivo_misma_empresa.txt");
 		Assert.assertEquals(1, Empresa.getEmpresas().size());
 	}
 	
 	@Test
 	public void validarCreacionPeriodosMismaEmpresa() throws IOException, ParseException{
-		Empresa.importarCuentasDesdeArchivo("C:\\archivo_misma_empresa.txt");
+		Empresa.importarCuentasDesdeArchivo("./archivo_misma_empresa.txt");
 		Assert.assertEquals(3, Empresa.getAllPeriodos().size());
 	}
 	
 	@Test
-	public void eliminarVariasEmpresasYEvaluarSize() throws IOException, ParseException{
+	public void eliminarVariasEmpresasYEvaluarSize() {
 		ArrayList<String> nombres = new ArrayList<String>(3);
 		nombres.add("Apple");
 		nombres.add("Microsoft");
@@ -56,7 +57,7 @@ public class CargarDatosTest {
 	}
 	
 	@Test
-	public void eliminarVariasEmpresasYEvaluarRestante() throws IOException, ParseException{
+	public void eliminarVariasEmpresasYEvaluarRestante() {
 		ArrayList<String> nombres = new ArrayList<String>(3);
 		nombres.add("Apple");
 		nombres.add("Microsoft");
@@ -73,7 +74,7 @@ public class CargarDatosTest {
 	}
 	
 	@Test
-	public void obtenerVariasEmpresas() throws IOException, ParseException{
+	public void obtenerVariasEmpresas() {
 		ArrayList<String> nombres = new ArrayList<String>(3);
 		nombres.add("Apple");
 		nombres.add("Microsoft");
@@ -84,5 +85,42 @@ public class CargarDatosTest {
 		}
 		
 		Assert.assertEquals(3, Empresa.obtenerEmpresasConNombre(nombres).size());
+	}
+
+	
+	@Test
+	public void consultarCuenta() throws PeriodoNoExisteException, CuentaNoExisteException, ParseException {
+		Empresa.importarCuentasDesdeArchivo("./archivo_2_empresas.txt");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		
+		Empresa empresa = Empresa.obtenerEmpresaConNombre("Apple");
+
+		float valor = empresa.consultarCuenta("mac", dateFormat.parse("01/01/2015"), dateFormat.parse("01/01/2016"));
+		
+		Assert.assertEquals(1000.0f, valor, 0.0f);
+	}
+	
+	@Test(expected = PeriodoNoExisteException.class)
+	public void consultarCuentaConPeriodoInexistente() throws PeriodoNoExisteException, CuentaNoExisteException, ParseException {
+		Empresa.importarCuentasDesdeArchivo("./archivo_2_empresas.txt");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		
+		Empresa empresa = Empresa.obtenerEmpresaConNombre("Apple");
+
+		float valor = empresa.consultarCuenta("mac", dateFormat.parse("02/01/2015"), dateFormat.parse("01/12/2016"));
+		
+		Assert.assertEquals(1000.0f, valor, 0.0f);
+	}
+	
+	@Test(expected = CuentaNoExisteException.class)
+	public void consultarCuentaConCuentaInexistente() throws PeriodoNoExisteException, CuentaNoExisteException, ParseException {
+		Empresa.importarCuentasDesdeArchivo("./archivo_2_empresas.txt");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		
+		Empresa empresa = Empresa.obtenerEmpresaConNombre("Apple");
+
+		float valor = empresa.consultarCuenta("estaCuentaNoExiste", dateFormat.parse("01/01/2015"), dateFormat.parse("01/01/2016"));
+		
+		Assert.assertEquals(1000.0f, valor, 0.0f);
 	}
 }
